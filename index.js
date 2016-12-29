@@ -2,8 +2,8 @@ var fs = require( 'fs' );
 var app = require('express')();
 var https        = require('https');
 var server = https.createServer({ 
-                key: fs.readFileSync('../.config/letsencrypt/live/feuerwehr-eisolzried.de/privkey.pem'),
-                cert: fs.readFileSync('../.config/letsencrypt/live/feuerwehr-eisolzried.de/fullchain.pem') 
+                key: fs.readFileSync('/home/ffw/.config/letsencrypt/live/feuerwehr-eisolzried.de/privkey.pem'),
+                cert: fs.readFileSync('/home/ffw/.config/letsencrypt/live/feuerwehr-eisolzried.de/fullchain.pem')
 },app);
 server.listen(62187, function(){
   console.log('listening on *:62187');
