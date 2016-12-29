@@ -10,17 +10,21 @@ server.listen(62187, function(){
 });
 
 var io = require('socket.io').listen(server);
+var history = [];
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  for (var i = 0; i < history.length; i++) {
+    io.emit('chat message', history[i]);
+  }
+  socket.on('chat message', function(msg){
+    history.push(msg);
+    if (history.length > 20) {
+      history.shift();
+    }
+    io.emit('chat message', msg);
+  });
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
 });
-
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
-  });
-});
-
