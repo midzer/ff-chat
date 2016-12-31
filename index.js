@@ -15,7 +15,7 @@ var history = [];
 io.on('connection', function(socket){
   console.log('a user connected');
   for (var i = 0; i < history.length; i++) {
-    io.emit('chat message', history[i]);
+    socket.emit('chat message', history[i]);
   }
   socket.on('chat message', function(msg){
     history.push(msg);
