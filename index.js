@@ -22,7 +22,7 @@ io.on('connection', function(socket){
     if (history.length > 20) {
       history.shift();
     }
-    io.emit('chat message', msg);
+    socket.broadcast.emit('chat message', msg);
   });
   socket.on('disconnect', function(){
     console.log('user disconnected');
