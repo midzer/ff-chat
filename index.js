@@ -1,4 +1,4 @@
-var fs = require( 'fs' );
+var fs = require('fs');
 var app = require('express')();
 var https        = require('https');
 var server = https.createServer({ 
