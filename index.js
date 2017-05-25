@@ -9,7 +9,7 @@ server.listen(62187, function(){
   console.log('listening on *:62187');
 });
 
-var io = require('engine.io').attach(server);
+var io = require('socket.io').listen(server);
 var history = [];
 
 io.on('connection', function(socket){
