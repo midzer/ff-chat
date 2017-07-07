@@ -18,13 +18,13 @@ wss.on('connection', function(socket) {
     }
   }
   socket.on("message", function(message) {
-    history.push(msg);
+    history.push(message);
     if (history.length > 20) {
       history.shift();
     }
     server.clients.forEach(function(client) {       
       if (client !== socket && client.readyState === WebSocket.OPEN ) {
-        client.send(data);
+        client.send(message);
       }
     });
   });
