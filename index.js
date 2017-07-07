@@ -5,26 +5,34 @@ var server = https.createServer({
                 key: fs.readFileSync('/home/ffw/.config/letsencrypt/live/feuerwehr-eisolzried.de/privkey.pem'),
                 cert: fs.readFileSync('/home/ffw/.config/letsencrypt/live/feuerwehr-eisolzried.de/fullchain.pem')
 },app);
-server.listen(62187, function(){
-  console.log('listening on *:62187');
-});
 
-var io = require('socket.io').listen(server);
+var WebSocket = require('ws');
+var wss = new WebSocket.Server({ server });
 var history = [];
 
-io.on('connection', function(socket){
+wss.on('connection', function(socket) {
   console.log('a user connected');
   for (var i = 0; i < history.length; i++) {
-    socket.emit('chat message', history[i]);
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(history[i]);
+    }
   }
-  socket.on('chat message', function(msg){
+  socket.on("message", function(message) {
     history.push(msg);
     if (history.length > 20) {
       history.shift();
     }
-    socket.broadcast.emit('chat message', msg);
+    server.clients.forEach(function(client) {       
+      if (client !== socket && client.readyState === WebSocket.OPEN ) {
+        client.send(data);
+      }
+    });
   });
-  socket.on('disconnect', function(){
+  socket.on('close', function() {
     console.log('user disconnected');
   });
+});
+
+server.listen(62187, function() {
+  console.log('listening on *:62187');
 });
