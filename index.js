@@ -22,7 +22,7 @@ wss.on('connection', function(socket) {
     if (history.length > 20) {
       history.shift();
     }
-    server.clients.forEach(function(client) {       
+    wss.clients.forEach(function(client) {       
       if (client !== socket && client.readyState === WebSocket.OPEN ) {
         client.send(message);
       }
