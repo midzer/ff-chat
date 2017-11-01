@@ -8,20 +8,31 @@ var server = https.createServer({
 
 var WebSocket = require('ws');
 var wss = new WebSocket.Server({ server });
-var history = [];
+
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+
+const adapter = new FileSync('db.json');
+const db = low(adapter);
+
+// Set some defaults
+db.defaults({ log: [] })
+  .write();
 
 wss.on('connection', function(socket) {
   console.log('a user connected');
-  for (var i = 0; i < history.length; i++) {
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(history[i]);
-    }
+  if (socket.readyState === WebSocket.OPEN) {
+    const msgs = db.get('log')
+                   .map('msg')
+                   .value();
+    msgs.forEach(msg => {
+      socket.send(msg);
+    });
   }
   socket.on("message", function(message) {
-    history.push(message);
-    if (history.length > 20) {
-      history.shift();
-    }
+    db.get('log')
+      .push({ msg: message })
+      .write();
     wss.clients.forEach(function(client) {       
       if (client !== socket && client.readyState === WebSocket.OPEN ) {
         client.send(message);
