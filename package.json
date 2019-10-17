@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "chat with other fire fighters",
   "dependencies": {
-    "express": "^4.14.0",
-    "ws": "^3.3.1"
+    "express": "^4.17.1",
+    "ws": "^3.3.3"
   },
   "devDependencies": {
     "lowdb": "^1.0.0"
