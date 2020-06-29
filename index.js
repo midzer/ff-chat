@@ -2,6 +2,12 @@ var app = require('express')();
 var http = require('http');
 var server = http.createServer(app);
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://feuerwehr-eisolzried.de");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 var WebSocket = require('ws');
 var wss = new WebSocket.Server({ server });
 
